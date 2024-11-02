@@ -1,12 +1,11 @@
 local ESP = {}
 
 ESP.Enabled = true
-ESP.Color = Color3.fromRGB(255, 255, 255)  -- Default color: white
+ESP.Color = Color3.fromRGB(255, 255, 255)
 ESP.OutlineColor = Color3.fromRGB(0,0,0)
-ESP.Size = 12  -- Default text size
-ESP.Objects = {}  -- Store all ESP instances here
+ESP.Size = 12
+ESP.Objects = {}
 
--- Function to enable or disable ESP
 function ESP:Toggle(state)
     self.Enabled = state
     for _, obj in pairs(self.Objects) do
@@ -14,7 +13,6 @@ function ESP:Toggle(state)
     end
 end
 
--- Function to set ESP text color
 function ESP:SetColor(color)
     self.Color = color
     for _, obj in pairs(self.Objects) do
@@ -24,9 +22,7 @@ function ESP:SetColor(color)
     end
 end
 
--- Function to create an ESP for an object
 function ESP:Add(object, text)
-    -- Ensure the object is valid and not already in the ESP list
     if not object or not object:IsA("BasePart") or self.Objects[object] then return end
 
     local espText = Drawing.new("Text")
@@ -38,17 +34,15 @@ function ESP:Add(object, text)
     espText.Outline = true
     espText.Text = text or "ESP"
 
-    -- Store the ESP object in the library
     self.Objects[object] = espText
 
-    -- Update the ESP object’s position on render
     game:GetService("RunService").RenderStepped:Connect(function()
         if not object or not object.Parent then
-            espText:Remove()  -- Remove the ESP if the object is no longer in the game
+            espText:Remove()
             self.Objects[object] = nil
         else
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
-            espText.Visible = onScreen and self.Enabled  -- Only show ESP if on screen and enabled
+            espText.Visible = onScreen and self.Enabled
             if onScreen then
                 espText.Position = Vector2.new(screenPos.X, screenPos.Y)
             end
@@ -56,7 +50,6 @@ function ESP:Add(object, text)
     end)
 end
 
--- Function to remove ESP for a specific object
 function ESP:Remove(object)
     if self.Objects[object] then
         self.Objects[object]:Remove()
@@ -64,7 +57,6 @@ function ESP:Remove(object)
     end
 end
 
--- Function to clear all ESP instances
 function ESP:Clear()
     for _, obj in pairs(self.Objects) do
         obj:Remove()
@@ -72,14 +64,11 @@ function ESP:Clear()
     self.Objects = {}
 end
 
--- Function to auto-add ESP for objects in a specified folder
 function ESP:TrackFolder(folder)
-    -- Add ESP for all existing objects in the folder
     for _, object in pairs(folder:GetChildren()) do
         self:Add(object, object.Name)
     end
 
-    -- Automatically add ESP for any new object added to the folder
     folder.ChildAdded:Connect(function(child)
         self:Add(child, child.Name)
     end)
