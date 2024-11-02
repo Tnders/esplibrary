@@ -31,7 +31,7 @@ function ESP:Add(object, text)
     local espText = Drawing.new("Text")
     espText.Visible = self.Enabled
     espText.Color = self.Color
-    espText.Size = self.TextSize
+    espText.Size = self.Size
     espText.Center = true
     espText.Outline = true
     espText.Text = text or "ESP"
