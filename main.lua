@@ -77,6 +77,12 @@ function espType:Remove(object)
     end
 end
 
+function espType:Update(object, newCustomText)
+    if self.Objects[object] then
+        self.Objects[object].Flags.CustomText = newCustomText or self.Objects[object].Flags.CustomText
+    end
+end
+
     self.Types[typeName] = espType  -- Store the new type
     return espType  -- Return the new ESP type
 end
