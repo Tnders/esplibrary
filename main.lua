@@ -29,46 +29,53 @@ function ESP:CreateType(typeName)
         end
     end
 
-    function espType:Add(object, customText)
-        if not object then return end
+    function espType:Add(object, customText, flags)
+    if not object then return end
 
-        local espData = {
-            Text = Drawing.new("Text"),
-            Object = object,
-        }
+    local espData = {
+        Text = Drawing.new("Text"),
+        Object = object,
+        Flags = flags or {},  -- Store any flags passed
+    }
 
-        espData.Text.Visible = self.Enabled
-        espData.Text.Color = self.Color
-        espData.Text.OutlineColor = self.OutlineColor
-        espData.Text.Size = self.Size
-        espData.Text.Center = true
-        espData.Text.Outline = true
+    espData.Text.Visible = self.Enabled
+    espData.Text.Color = self.Color
+    espData.Text.OutlineColor = self.OutlineColor
+    espData.Text.Size = self.Size
+    espData.Text.Center = true
+    espData.Text.Outline = true
 
-        -- Register ESP object
-        self.Objects[object] = espData
+    -- Register ESP object
+    self.Objects[object] = espData
 
-        -- Update ESP position and text
-        game:GetService("RunService").RenderStepped:Connect(function()
-            if not object or not object.Parent then
-                espData.Text:Remove()
-                self.Objects[object] = nil
-            else
-                local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
-                espData.Text.Visible = onScreen and self.Enabled
-                if onScreen then
-                    espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y)
-                    espData.Text.Text = customText or object.Name  -- Display custom text or object name
-                end
-            end
-        end)
-    end
-
-    function espType:Remove(object)
-        if self.Objects[object] then
-            self.Objects[object].Text:Remove()
+    -- Update ESP position and text
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not object or not object.Parent then
+            espData.Text:Remove()
             self.Objects[object] = nil
+        else
+            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
+            espData.Text.Visible = onScreen and self.Enabled
+            if onScreen then
+                espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y)
+
+                -- Concatenate custom text and flags
+                local displayText = customText or object.Name
+                for flag, value in pairs(espData.Flags) do
+                    displayText = displayText .. " | " .. flag .. ": " .. tostring(value)
+                end
+                espData.Text.Text = displayText  -- Update the display text
+            end
         end
+    end)
+end
+
+function espType:Remove(object)
+    if self.Objects[object] then
+        self.Objects[object].Text:Remove()
+        self.Objects[object] = nil
     end
+end
 
     self.Types[typeName] = espType  -- Store the new type
     return espType  -- Return the new ESP type
