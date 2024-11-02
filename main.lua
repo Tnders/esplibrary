@@ -10,8 +10,8 @@ function ESP:CreateType(typeName)
         Enabled = false,
         Color = Color3.fromRGB(255,255,255),
         OutlineColor = Color3.fromRGB(0,0,0),
-        Size = 12,  -- Default text size
-        Objects = {}  -- Table to hold ESP objects
+        Size = 12,
+        Objects = {}
     }
 
     function espType:Toggle(state)
@@ -28,7 +28,7 @@ function ESP:CreateType(typeName)
         end
     end
 
-    function espType:Add(object, customText, flags)
+    function espType:Add(object, customText, flags, offsetX, offsetY)
     if not object then return end
 
     local espData = {
@@ -54,7 +54,7 @@ function ESP:CreateType(typeName)
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
             espData.Text.Visible = onScreen and self.Enabled
             if onScreen then
-                espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y)
+                espData.Text.Position = Vector2.new(screenPos.X + (offsetX or 0), screenPos.Y + (offsetY or 0))
 
                 local displayText = customText or object.Name
                 for flag, value in pairs(espData.Flags) do
@@ -64,7 +64,7 @@ function ESP:CreateType(typeName)
             end
         end
     end)
-        return espData
+    return espData
 end
 
 function espType:Remove(object)
