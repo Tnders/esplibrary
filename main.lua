@@ -68,6 +68,7 @@ function ESP:CreateType(typeName)
             end
         end
     end)
+        return espData
 end
 
 function espType:Remove(object)
