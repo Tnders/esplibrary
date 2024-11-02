@@ -1,15 +1,14 @@
 local ESP = {}
 ESP.Types = {}
 
--- Create a new ESP type
 function ESP:CreateType(typeName)
     if self.Types[typeName] then
-        return self.Types[typeName]  -- Return existing type if it exists
+        return self.Types[typeName]
     end
 
     local espType = {
         Enabled = true,
-        Color = Color3.fromRGB(255,255,255),  -- Default color: white
+        Color = Color3.fromRGB(255,255,255),
         OutlineColor = Color3.fromRGB(0,0,0),
         Size = 12,  -- Default text size
         Objects = {}  -- Table to hold ESP objects
@@ -35,7 +34,7 @@ function ESP:CreateType(typeName)
     local espData = {
         Text = Drawing.new("Text"),
         Object = object,
-        Flags = flags or {},  -- Store any flags passed
+        Flags = flags or {},
     }
 
     espData.Text.Visible = self.Enabled
@@ -45,10 +44,8 @@ function ESP:CreateType(typeName)
     espData.Text.Center = true
     espData.Text.Outline = true
 
-    -- Register ESP object
     self.Objects[object] = espData
 
-    -- Update ESP position and text
     game:GetService("RunService").RenderStepped:Connect(function()
         if not object or not object.Parent then
             espData.Text:Remove()
@@ -59,12 +56,11 @@ function ESP:CreateType(typeName)
             if onScreen then
                 espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y)
 
-                -- Concatenate custom text and flags
                 local displayText = customText or object.Name
                 for flag, value in pairs(espData.Flags) do
                     displayText = displayText .. " | " .. flag .. ": " .. tostring(value)
                 end
-                espData.Text.Text = displayText  -- Update the display text
+                espData.Text.Text = displayText
             end
         end
     end)
@@ -84,8 +80,8 @@ function espType:Update(object, newCustomText)
     end
 end
 
-    self.Types[typeName] = espType  -- Store the new type
-    return espType  -- Return the new ESP type
+    self.Types[typeName] = espType
+    return espType
 end
 
 return ESP
