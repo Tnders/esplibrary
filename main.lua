@@ -64,13 +64,13 @@ function ESP:Clear()
     self.Objects = {}
 end
 
-function ESP:TrackFolder(folder, text)
+function ESP:TrackFolder(folder)
     for _, object in pairs(folder:GetChildren()) do
-        self:Add(object, text)
+        self:Add(object, object.text)
     end
 
     folder.ChildAdded:Connect(function(child)
-        self:Add(child, text)
+        self:Add(child, object.text)
     end)
 end
 
