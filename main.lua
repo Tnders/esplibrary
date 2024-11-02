@@ -7,7 +7,7 @@ function ESP:CreateType(typeName)
     end
 
     local espType = {
-        Enabled = true,
+        Enabled = false,
         Color = Color3.fromRGB(255,255,255),
         OutlineColor = Color3.fromRGB(0,0,0),
         Size = 12,  -- Default text size
