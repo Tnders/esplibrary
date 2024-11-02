@@ -30,7 +30,7 @@ function ESP:Add(object, customText)
     espData.Text.Visible = self.Enabled
     espData.Text.Color = self.Color
     espData.Text.OutlineColor = self.OutlineColor
-    espData.Text.Size = self.TextSize
+    espData.Text.Size = self.Size
     espData.Text.Center = true
     espData.Text.Outline = true
 
