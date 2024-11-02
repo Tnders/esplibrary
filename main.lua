@@ -2,6 +2,7 @@ local ESP = {}
 
 ESP.Enabled = true
 ESP.Color = Color3.fromRGB(255, 255, 255)  -- Default color: white
+ESP.OutlineColor = Color3.fromRGB(0,0,0)
 ESP.Size = 12  -- Default text size
 ESP.Objects = {}  -- Store all ESP instances here
 
@@ -31,6 +32,7 @@ function ESP:Add(object, text)
     local espText = Drawing.new("Text")
     espText.Visible = self.Enabled
     espText.Color = self.Color
+    espText.OutlineColor = self.OutlineColor
     espText.Size = self.Size
     espText.Center = true
     espText.Outline = true
