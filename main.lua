@@ -28,7 +28,7 @@ function ESP:CreateType(typeName)
         end
     end
 
-    function espType:Add(object, customText, flags, offsetX, offsetY)
+    function espType:Add(object, customText, flags, offsetY)
     if not object then return end
 
     local espData = {
@@ -54,7 +54,8 @@ function ESP:CreateType(typeName)
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
             espData.Text.Visible = onScreen and self.Enabled
             if onScreen then
-                espData.Text.Position = Vector2.new(screenPos.X + (offsetX or 0), screenPos.Y + (offsetY or 0))
+                -- Apply the upward offset only
+                espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y - (offsetY or 0))
 
                 local displayText = customText or object.Name
                 for flag, value in pairs(espData.Flags) do
