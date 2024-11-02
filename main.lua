@@ -66,11 +66,19 @@ end
 
 function ESP:TrackFolder(folder)
     for _, object in pairs(folder:GetChildren()) do
-        self:Add(object, object.Name)
+        if object:IsA("Folder") then
+            self:TrackFolder(object)
+        elseif object:IsA("BasePart") then
+            self:Add(object, object.Name)
+        end
     end
 
     folder.ChildAdded:Connect(function(child)
-        self:Add(child, object.Name)
+        if child:IsA("Folder") then
+            self:TrackFolder(child)
+        elseif child:IsA("BasePart") then
+            self:Add(child, child.Name)
+        end
     end)
 end
 
