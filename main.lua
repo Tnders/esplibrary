@@ -1,8 +1,8 @@
 local ESP = {}
 
 ESP.Enabled = true
-ESP.Color = Color3.new(1, 1, 1)  -- Default color: white
-ESP.TextSize = 18  -- Default text size
+ESP.Color = Color3.fromRGB(255, 255, 255)  -- Default color: white
+ESP.TextSize = 12  -- Default text size
 ESP.Objects = {}  -- Store all ESP instances here
 
 -- Function to enable or disable ESP
