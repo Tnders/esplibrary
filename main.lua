@@ -47,24 +47,29 @@ function ESP:CreateType(typeName)
         self.Objects[object] = espData
 
         game:GetService("RunService").RenderStepped:Connect(function()
-            if not object or not object.Parent then
-                espData.Text:Remove()
-                self.Objects[object] = nil
-            end
-            
-            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
-            espData.Text.Visible = onScreen and self.Enabled
-            if onScreen then
-                espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y - (offsetY or 0))
+    if not object or not object.Parent then
+        espData.Text:Remove()
+        self.Objects[object] = nil
+        return
+    end
 
-                local displayText = customText or object.Name
-                for flag, value in pairs(espData.Flags) do
-                    displayText = displayText .. " | " .. flag .. ": " .. tostring(value)
-                end
-                espData.Text.Text = displayText
-            end
-        end)
+    local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
 
+    -- Update only if visibility changes
+    if espData.Text.Visible ~= (onScreen and self.Enabled) then
+        espData.Text.Visible = onScreen and self.Enabled
+    end
+
+    if onScreen then
+        espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y - (offsetY or 0))
+
+        local displayText = customText or object.Name
+        for flag, value in pairs(espData.Flags) do
+            displayText = displayText .. " | " .. flag .. ": " .. tostring(value)
+        end
+        espData.Text.Text = displayText
+    end
+end)
         return espData
     end
 
