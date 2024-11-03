@@ -51,7 +51,7 @@ function ESP:CreateType(typeName)
                 espData.Text:Remove()
                 self.Objects[object] = nil
             end
-                if object.Parent == workspace.TargetFilter.Misc then
+                if object.parent.parent.Parent == workspace.TargetFilter.Misc then
                     espData.Text.Visible = false
                     return
                 end
