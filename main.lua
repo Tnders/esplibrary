@@ -51,10 +51,11 @@ function ESP:CreateType(typeName)
                 espData.Text:Remove()
                 self.Objects[object] = nil
             end
-                if object.parent.parent.Parent == workspace.TargetFilter.Misc then
-                    espData.Text.Visible = false
-                    return
-                end
+                
+            if object.parent.parent and object.parent.parent.Parent == workspace.TargetFilter.Misc then
+                espData.Text.Visible = false
+                return
+            end
             
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
             espData.Text.Visible = onScreen and self.Enabled
