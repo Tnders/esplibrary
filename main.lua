@@ -29,32 +29,33 @@ function ESP:CreateType(typeName)
     end
 
     function espType:Add(object, customText, flags, offsetY)
-    if not object then return end
+        if not object then return end
 
-    local espData = {
-        Text = Drawing.new("Text"),
-        Object = object,
-        Flags = flags or {},
-    }
+        local espData = {
+            Text = Drawing.new("Text"),
+            Object = object,
+            Flags = flags or {},
+        }
 
-    espData.Text.Visible = self.Enabled
-    espData.Text.Color = self.Color
-    espData.Text.OutlineColor = self.OutlineColor
-    espData.Text.Size = self.Size
-    espData.Text.Center = true
-    espData.Text.Outline = true
+        espData.Text.Visible = self.Enabled
+        espData.Text.Color = self.Color
+        espData.Text.OutlineColor = self.OutlineColor
+        espData.Text.Size = self.Size
+        espData.Text.Center = true
+        espData.Text.Outline = true
 
-    self.Objects[object] = espData
+        self.Objects[object] = espData
 
-    game:GetService("RunService").RenderStepped:Connect(function()
-        if not object or not object.Parent then
-            espData.Text:Remove()
-            self.Objects[object] = nil
-        else
+        game:GetService("RunService").RenderStepped:Connect(function()
+            if not object or not object.Parent then
+                espData.Text:Remove()
+                self.Objects[object] = nil
+                return
+            end
+            
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
             espData.Text.Visible = onScreen and self.Enabled
             if onScreen then
-                -- Apply the upward offset only
                 espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y - (offsetY or 0))
 
                 local displayText = customText or object.Name
@@ -63,23 +64,23 @@ function ESP:CreateType(typeName)
                 end
                 espData.Text.Text = displayText
             end
+        end)
+
+        return espData
+    end
+
+    function espType:Remove(object)
+        if self.Objects[object] then
+            self.Objects[object].Text:Remove()
+            self.Objects[object] = nil
         end
-    end)
-    return espData
-end
-
-function espType:Remove(object)
-    if self.Objects[object] then
-        self.Objects[object].Text:Remove()
-        self.Objects[object] = nil
     end
-end
 
-function espType:Update(object, newCustomText)
-    if self.Objects[object] then
-        self.Objects[object].Flags.CustomText = newCustomText or self.Objects[object].Flags.CustomText
+    function espType:Update(object, newCustomText)
+        if self.Objects[object] then
+            self.Objects[object].Flags.CustomText = newCustomText or self.Objects[object].Flags.CustomText
+        end
     end
-end
 
     self.Types[typeName] = espType
     return espType
