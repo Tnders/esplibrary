@@ -50,7 +50,6 @@ function ESP:CreateType(typeName)
             if not object or not object.Parent then
                 espData.Text:Remove()
                 self.Objects[object] = nil
-                return
             end
             
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
