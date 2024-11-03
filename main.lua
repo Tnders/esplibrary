@@ -52,9 +52,11 @@ function ESP:CreateType(typeName)
                 self.Objects[object] = nil
             end
                 
-            if object.parent.parent and object.parent.parent.Parent == workspace.TargetFilter.Misc then
-                espData.Text.Visible = false
-                return
+            if object.parent and object.parent.parent and object.parent.parent.Parent and workspace.TargetFilter and workspace.TargetFilter.Misc then
+                if object.parent.parent.Parent == workspace.TargetFilter.Misc then
+                    espData.Text.Visible = false
+                    return
+                end
             end
             
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
