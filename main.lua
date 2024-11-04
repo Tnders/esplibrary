@@ -34,7 +34,7 @@ function ESP:CreateType(typeName)
         local espData = {
             Text = Drawing.new("Text"),
             Object = object,
-            Flags = flags or {},
+            Flags = flags or {}
         }
 
         espData.Text.Visible = self.Enabled
@@ -50,20 +50,20 @@ function ESP:CreateType(typeName)
             if not object or not object.Parent then
                 espData.Text:Remove()
                 self.Objects[object] = nil
+                return
             end
-                
-            if object.parent and object.parent.parent and object.parent.parent.Parent and workspace.TargetFilter and workspace.TargetFilter.Misc then
-                if object.parent.parent.Parent == workspace.TargetFilter.Misc then
-                    espData.Text.Visible = false
-                    return
-                end
+            
+            if object.Parent.Parent and object.Parent.Parent.Parent == workspace.TargetFilter.Misc then
+                espData.Text.Visible = false
+                return
             end
             
             local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(object.Position)
             espData.Text.Visible = onScreen and self.Enabled
+
             if onScreen then
                 espData.Text.Position = Vector2.new(screenPos.X, screenPos.Y - (offsetY or 0))
-
+                
                 local displayText = customText or object.Name
                 for flag, value in pairs(espData.Flags) do
                     displayText = displayText .. " | " .. flag .. ": " .. tostring(value)
